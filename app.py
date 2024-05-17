@@ -51,7 +51,8 @@ def index():
     """render home page for the main site"""
     return render_template('index.html')
 
-@app.route('/about', endpoint='about')                          def about():
+@app.route('/about', endpoint='about')
+def about():
     """renders the about page of the main site"""
     return render_template('about.html')
 
@@ -61,7 +62,7 @@ def buy():
     return render_template('buy.html')
 
 @app.route('/rent', endpoint='rent')
-def buy():
+def rent():
     """renders the rent page of the main site"""
     return render_template('rent.html')
 
