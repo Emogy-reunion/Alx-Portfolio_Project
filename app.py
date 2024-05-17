@@ -44,8 +44,32 @@ class Image(db.Model):
     filename = db.Column(db.String(100), nullable=False)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.id'), nullable=False)
 
-    
 db.create_all()
+
+@app.route('/', endpoint='home')
+def index():
+    """render home page for the main site"""
+    return render_template('index.html')
+
+@app.route('/about', endpoint='about')                          def about():
+    """renders the about page of the main site"""
+    return render_template('about.html')
+
+@app.route('/buy', endpoint='buy')
+def buy():
+    """renders the buy page of the main site"""
+    return render_template('buy.html')
+
+@app.route('/rent', endpoint='rent')
+def buy():
+    """renders the rent page of the main site"""
+    return render_template('rent.html')
+
+@app.route('/contact', endpoint='contact')
+def contact():
+    """renders the contact page of the main site"""
+    return render_template('contact.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
