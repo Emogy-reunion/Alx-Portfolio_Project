@@ -1,5 +1,7 @@
 # Real Estate Listing App
 
+# BACKEND IMPLEMENTATION
+
 ## App initialization
 * I initialized the flask app by import Flask from flask
 
@@ -31,3 +33,6 @@
 * If the credentials match the user is redirected to dashboard.html rendered by ('/dashboard')
 * If a user hasn't registered yet, there is a create acvount link on the login page, when clicked, the create_account.html page is rendered by (,/register,')
 * After a user has entered necessary details, the data is submitted to the server for processing, after data is saved to database, the user is redirected to the login page
+
+## Uploading
+*

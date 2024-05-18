@@ -1,8 +1,9 @@
 from flask import Flask, render_template, url_for, redirect, request, flash
 from sqlalchemy.orm import relationship
-from flask_alchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_user
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash, secure_filename
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
+import os
 
 #Initiliaze flask app
 app = Flask(__name__)
@@ -10,9 +11,15 @@ app = Flask(__name__)
 #configure sqlalchemy, flask login
 app.config['SECRET_KEY'] = 'MY_KEY'
 app.config['SQLALCHEMY_DATABASE_URI'] = ""
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 class User(UserMixin, db.Model):
     """Class to store user information"""
@@ -113,6 +120,65 @@ def register():
             db.session.commit()
             return redirect(url_for('login'))
     return render_template('create_account.html')
+
+@login_required
+@app.route('/dashboard', methods=['POST'], endpoint='dashboard')
+def dashboard():
+    """render logged in users dashboard"""
+    return render_template('dashboard.html')
+
+@login_required
+@app.route('/upload', methods=['GET', 'POST'], endpoint='upload')
+def upload():
+    if request.method == 'POST':
+        location = request.form['location']
+        price = request.form['price']
+        bedrooms = request.form['bedrooms']
+        description = request.form['description']
+        features = request.form['features']
+        user_id = current_user.id
+
+        my_property = Property(location=location, price=price, bedrooms=bedrooms, user_id=user_id)
+        db.session.add(my_property)
+        db.session.commit()
+
+        if 'image[]' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+
+        images = request.files.getlist('image[]')
+        if not images:
+            flash('No selected files')
+            return redirect(request.url)
+
+        saved_files = []
+        for image in images:
+            if image.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+
+            if image and allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                new_image = Image(filename=filename, property_id=my_property.id)
+                db.session.add(new_image)
+                saved_files.append(filename)
+
+        if not saved_files:
+            flash('No files saved')
+            return redirect(request.url)
+        else:
+            flash('Files saved successfully!')
+            return redirect(url_for('uploads'))
+
+    return render_template('upload.html')
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
 
 
 if __name__ == '__main__':
