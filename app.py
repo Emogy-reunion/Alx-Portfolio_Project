@@ -1,9 +1,8 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask, render_template, url_for, redirect, request, flash
 from sqlalchemy.orm import relationship
 from flask_alchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user
-
 
 #Initiliaze flask app
 app = Flask(__name__)

@@ -23,3 +23,11 @@
 * When a user clicks buy, the buy page buy.html is rendered by the ('/buy') route
 * When a user clicks rent,the rent page which is rent.html is rendered by ('/rent')
 * when a User clicks contact, the contact page is rendered by contact.html rendered by ('/contact')
+
+## Authentication
+* When a user clicks the login link on the main site, the login page login.html is rendered by ('/login')
+* The login page has a form which the user keys in details
+* When the user clicks the submit button, the data is ferried to the server for processing, a user with the email is retrieved, the password is verified against the password saved in the database
+* If the credentials match the user is redirected to dashboard.html rendered by ('/dashboard')
+* If a user hasn't registered yet, there is a create acvount link on the login page, when clicked, the create_account.html page is rendered by (,/register,')
+* After a user has entered necessary details, the data is submitted to the server for processing, after data is saved to database, the user is redirected to the login page
