@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for, redirect, request, flash
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash, secure_filename
+from werkzeug.utils import secure_filename
+from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 import os
 
@@ -10,8 +11,8 @@ app = Flask(__name__)
 
 #configure sqlalchemy, flask login
 app.config['SECRET_KEY'] = 'MY_KEY'
-app.config['SQLALCHEMY_DATABASE_URI'] = ""
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://emogyreunion:mark734@localhost/realestate"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
@@ -31,7 +32,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), unique=False, nullable=False)
     phone_number = db.Column(db.Integer, unique=False, nullable=False)
-    agency = db.Column(db.String, unique=False, nullable=False)
+    agency = db.Column(db.String(50), unique=False, nullable=False)
     properties = relationship('Property', backref='user', lazy=True)
 
 
@@ -56,7 +57,8 @@ class Image(db.Model):
     filename = db.Column(db.String(100), nullable=False)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.id'), nullable=False)
 
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 @app.route('/', endpoint='home')
 def index():
