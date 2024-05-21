@@ -47,7 +47,7 @@ class Property(db.Model):
     description = db.Column(db.Text, nullable=False)
     features = db.Column(db.String(250), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    images = relationship('Image', backref='property', lazy=True)
+    images = relationship('Image', backref='property', lazy=True, cascade='all, delete-orphan')
 
 
 class Image(db.Model):
@@ -179,6 +179,35 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/uploads')
+@login_required
+def uploads():
+    """Retrieves property associated with a user"""
+    user_id = current_user.id
+    properties_with_images = Property.query.filter_by(user_id=user_id).options(db.joinedload('images')).all()
+    return render_template('uploads.html', properties_with_images=properties_with_images)
+
+@app.route('/details/<int:property_id>')
+def details(property_id):
+    """Retrieves property details"""
+    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
+    return render_template('details.html', property_with_images=property_with_images)
+
+
+@app.route('/delete_property/<int:property_id>', methods=['POST'])
+@login_required
+def delete_property(property_id):
+    """Deletes a property based on its property_id"""
+    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
+
+    if property_with_images and property_with_images.user_id == current_user.id:
+        db.session.delete(property_with_images)
+        db.session.commit()
+        flash('Property deleted successfully.')
+    else:
+        flash('Property not found or you do not have permission to delete it.')
+
+    return redirect(url_for('uploads'))
 
 
 
