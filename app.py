@@ -31,7 +31,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), unique=False, nullable=False)
-    phone_number = db.Column(db.Integer, unique=False, nullable=False)
+    phone_number = db.Column(db.String(50), unique=False, nullable=False)
     agency = db.Column(db.String(50), unique=False, nullable=False)
     properties = relationship('Property', backref='user', lazy=True)
 
@@ -42,17 +42,19 @@ class Property(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
     bedrooms = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=False)
     features = db.Column(db.String(250), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    for_rent = db.Column(db.Boolean, nullable=False)
     images = relationship('Image', backref='property', lazy=True, cascade='all, delete-orphan')
 
 
 class Image(db.Model):
     """stores property filenames"""
     __tablename__ = "images"
+
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(100), nullable=False)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.id'), nullable=False)
@@ -123,24 +125,27 @@ def register():
             return redirect(url_for('login'))
     return render_template('create_account.html')
 
-@login_required
+
 @app.route('/dashboard', methods=['POST'], endpoint='dashboard')
+@login_required
 def dashboard():
     """render logged in users dashboard"""
     return render_template('dashboard.html')
 
-@login_required
+
 @app.route('/upload', methods=['GET', 'POST'], endpoint='upload')
+@login_required
 def upload():
     if request.method == 'POST':
         location = request.form['location']
-        price = request.form['price']
-        bedrooms = request.form['bedrooms']
+        price = float(request.form['price'])
+        bedrooms = int(request.form['bedrooms'])
         description = request.form['description']
         features = request.form['features']
+        for_rent = request.form['for_rent'].lower() == 'true'
         user_id = current_user.id
 
-        my_property = Property(location=location, price=price, bedrooms=bedrooms, user_id=user_id)
+        my_property = Property(location=location, price=price, bedrooms=bedrooms, user_id=user_id, for_rent=for_rent)
         db.session.add(my_property)
         db.session.commit()
 
@@ -198,10 +203,9 @@ def details(property_id):
 @login_required
 def delete_property(property_id):
     """Deletes a property based on its property_id"""
-    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
-
-    if property_with_images and property_with_images.user_id == current_user.id:
-        db.session.delete(property_with_images)
+    property1 = Property.query.filter_by(id=property_id)
+    if property1 and property1.user_id == current_user.id:
+        db.session.delete(property1)
         db.session.commit()
         flash('Property deleted successfully.')
     else:
@@ -209,7 +213,47 @@ def delete_property(property_id):
 
     return redirect(url_for('uploads'))
 
-
+@app.route('/update_property/<int:property_id>', methods=['GET', 'PATCH'])
+@login_required
+def update_property(property_id):
+    """Updates property with specific id"""
+    property1 = Property.query.get_or_404(property_id)
+    
+    if property1.user_id != current_user.id:
+        flash('Unauthorized access', 'error')
+        return redirect(url_for('uploads'))
+    
+    if request.method == 'GET':
+        return render_template('update.html', property1=property1)
+    
+    if request.method == 'PATCH':
+        data = request.form
+        
+        if not data:
+            flash('Bad Request', 'error')
+            return redirect(url_for('uploads'))
+        
+        if 'location' in data:
+            property1.location = data['location']
+        
+        if 'price' in data:
+            property1.price = int(data['price'])
+        
+        if 'bedrooms' in data:
+            property1.bedrooms = int(data['bedrooms'])
+        
+        if 'features' in data:
+            property1.features = data['features']
+        
+        if 'description' in data:
+            property1.description = data['description']
+        
+        if 'for_rent' in data:
+            property1.for_rent = data['for_rent'].lower() == 'true'
+        
+        db.session.commit()
+        flash('Updated successfully', 'success')
+        return redirect(url_for('uploads'))
 
 
 if __name__ == '__main__':
