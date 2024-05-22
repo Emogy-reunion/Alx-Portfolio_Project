@@ -237,7 +237,7 @@ def update_property(property_id):
             property1.location = data['location']
         
         if 'price' in data:
-            property1.price = int(data['price'])
+            property1.price = float(data['price'])
         
         if 'bedrooms' in data:
             property1.bedrooms = int(data['bedrooms'])
