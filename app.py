@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 import os
+from flask_mail import Mail, Message
 
 #Initiliaze flask app
 app = Flask(__name__)
@@ -15,7 +16,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://emogyreunion:mark734@localhost/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAIL_SERVER'] = 'smtp@gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'info.markrealestateapp734@gmail.com'
+app.config['MAIL_PASSWORD'] = 'MY_PASSWORD'
 
+mail = Mail(app)
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -193,6 +201,7 @@ def uploads():
     return render_template('uploads.html', properties_with_images=properties_with_images)
 
 @app.route('/details/<int:property_id>')
+@login_required
 def details(property_id):
     """Retrieves property details"""
     property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
@@ -255,6 +264,58 @@ def update_property(property_id):
         flash('Updated successfully', 'success')
         return redirect(url_for('uploads'))
 
+@app.route('/send_email/<int:user_id>', methods=['POST'])
+def send_email(user_id):
+    """Sends an email to a specific user based on form submission."""
+    user = User.query.get(user_id)
+    if not user:
+        return "User not found", 404
+    
+    data = request.form
+
+    email = data.get('email')
+    name = data.get('name')
+    message = data.get('message')
+
+    if not all([email, name, message]):
+        return "Missing form data", 400
+
+    msg = Message(
+        subject='Contact Form Submission',
+        sender=('RealEstateApp', 'info.markrealestateapp734@gmail.com'),
+        recipients=[user.email]
+    )
+
+    msg.body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+
+    try:
+        mail.send(msg)
+        return "Email sent successfully", 200
+    except Exception as e:
+        return str(e), 500
+
+
+@app.route('/sale')
+def get_sale():
+    """Retrieves all properties for sale"""
+    properties_with_images = Property.query.filter_by(for_rent=False).options(db.joinedload('images')).all()
+    return render_template('sale.html', properties_with_images=properties_with_images)
+
+
+@app.route('/rent')
+def get_rent():
+    """Retrieves all properties for rent"""
+    properties_with_images = Property.query.filter_by(for_rent=True).options(db.joinedload('images')).all()
+    return render_template('rent.html', properties_with_images=properties_with_images)
+
+
+@app.route('/property_details/<int:property_id>')
+def property_details(property_id):
+    """Retrieves property details"""
+    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
+    if not property_with_images:
+        return "Property not found", 404
+    return render_template('property_details.html', property_with_images=property_with_images)
 
 if __name__ == '__main__':
     app.run(debug=True)
