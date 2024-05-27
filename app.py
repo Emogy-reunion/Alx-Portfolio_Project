@@ -35,8 +35,8 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
+    firstname = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), unique=False, nullable=False)
     phone_number = db.Column(db.String(50), unique=False, nullable=False)
@@ -117,8 +117,8 @@ def login():
 def register():
     """handles creating account request"""
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
+        firstname = request.form['first_name']
+        lastname = request.form['last_name']
         email = request.form['email']
         phone_number = request.form['phone_number']
         agency = request.form['agency']
@@ -127,7 +127,7 @@ def register():
             flash('There is an account associated with this email.')
         else:
             hashed_password = generate_password_hash(password)
-            new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, agency=agency, password=hashed_password)
+            new_user = User(firstname=firstname, lastname=lastname, email=email, phone_number=phone_number, agency=agency, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -157,7 +157,7 @@ def upload():
         db.session.add(my_property)
         db.session.commit()
 
-        if 'image[]' not in request.files:
+        if 'images' not in request.files:
             flash('No file part')
             return redirect(request.url)
 
@@ -316,6 +316,77 @@ def property_details(property_id):
     if not property_with_images:
         return "Property not found", 404
     return render_template('property_details.html', property_with_images=property_with_images)
+
+
+@app.route('/display_profile')
+@login_required
+def display_profile():
+    """route to retrieve tge current usrr's profile info"""
+    user = User.query.get(current_user.id)
+
+    if user and user.id == current_user.id:
+        return render_template('profile.html', user=user)
+    flash('User not Found', 'Error')
+
+@app.route('/update_profile', methods=['GET', 'PATCH'])
+@login_required
+def update_profile:
+    user = User.query.get(current_user.id)
+
+    if not user or user.id != current_user.id:
+        flash("User not found or no authorization")
+        return redirect(request.url)
+
+    if request.method == 'GET':
+        return render_template('update_profile.html', user=user)
+
+    if request.method == 'PATCH':
+        data = request.form
+        
+        if not data:
+            flash("No data sent")
+            return redirect(url_for('update_profile'))
+
+        if 'firstname' in data:
+            user.firstname = data['firstname']
+
+        if 'lastname' in data:
+            user.lastname = data['lastname']
+        
+        if 'email' in data:
+            user.email = data['email']
+
+        if 'agency' in data:
+            user.agency = data['agency']
+
+        db.session.commit()
+        flash('Updated successfully', 'success')
+
+@app.route('/delete_profile', methods=['POST'])
+@login_required
+def delete_profile():
+    """deletes a user's profile"""
+    user = User.query.get(current_user.id)
+
+    if not user or user.id != current_user.id:
+        flash('No authorization', 'error')
+        return redirect(request.url)
+
+    db.session.delete(user)
+    db.session.commit()
+    flash('Account deleted successfuly')
+
+    return redirect(url_for('home'))
+
+@app.route('/logout_user')
+@login_required
+def logout():
+    """logs out the user"""
+    logout_user()
+    flash('Logged out successfully', 'success')
+    return redirect(url_for('home'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
