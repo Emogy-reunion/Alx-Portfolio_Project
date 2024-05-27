@@ -83,12 +83,18 @@ def about():
 @app.route('/buy', endpoint='buy')
 def buy():
     """renders the buy page of the main site"""
-    return render_template('buy.html')
+    properties = Property.query.filter_by(for_rent=False).options(db.joinedload('images')).all()
+    return render_template('sale.html', properties=properties)
 
 @app.route('/rent', endpoint='rent')
 def rent():
-    """renders the rent page of the main site"""
-    return render_template('rent.html')
+    """retrieves properties for rent"""
+    properties = Property.query.filter_by(for_rent=True).options(db.joinedload('images')).all()
+    return render_template('rent.html', properties=properties)
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/contact', endpoint='contact')
 def contact():
