@@ -392,6 +392,46 @@ def logout():
     flash('Logged out successfully', 'success')
     return redirect(url_for('home'))
 
+@app.route('/search')
+def search():
+    location = request.args.get('location')
+    min_price = request.args.get('min_price', type=float)
+    max_price = request.args.get('max_price', type=float)
+    bedrooms = request.args.get('bedrooms', type=int)
+
+    query = query.Property
+
+    if location:
+        query = query.filter_by(Property.location.ilike(f"%{location}%"))
+
+    if min_price is not None:
+        query = query.filter_by(Property.price >= min_price)
+
+    if max_price is not None:
+        query = query.filter_by(Property.price >= max_price)
+    
+    if bedrooms is not None:
+        query = query.filter_by(Property.bedrooms == bedrooms)
+    
+    properties = query.options(db.joinedload('images')).all()
+
+    result = []
+
+    for property1 in properties:
+        result.append({
+            'id':property1.id,
+            'location':propert1.location,
+            'price':property1.price,
+            'features':property1.features,
+            'description':property1.description,
+            'bedrooms':property1.bedrooms,
+            'features':property1.features,
+            'image_filename':property1.images[0].filename if property1.images else None
+            })
+    if not result:
+        return jsonify({'error': 'Not Found'}, 404)
+    else:
+        return jsonify(result)
 
 
 if __name__ == '__main__':
