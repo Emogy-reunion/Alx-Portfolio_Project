@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uploads/uploads.css') }}">
+    <title>RENT</title>
+</head>
+<body>
+    <div id="container">
+        {% if properties_with_images %}
+            {% for property_item in properties_with_images %}
+                <div class="item" data-property_id="{{ property_item.id }}">
+                    <div class="image">
+                        <img src="{{ url_for('uploaded_file', filename=property_item.images[0].filename) }}" alt="{{ property_item.images[0].filename }}">
+                    </div>
+                    <div class="description">
+                        <h2>{{ property_item.location }}</h2>
+                        <p>ksh <span class="price">{{ property_item.price }}</span>/month</p>
+                        <p>{{ property_item.bedrooms }} bedrooms</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No Properties Available</p>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/uploads.js') }}"></script>
+</body>
+</html>
