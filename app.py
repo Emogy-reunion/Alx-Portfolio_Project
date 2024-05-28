@@ -300,21 +300,6 @@ def send_email(user_id):
     except Exception as e:
         return str(e), 500
 
-
-@app.route('/sale')
-def get_sale():
-    """Retrieves all properties for sale"""
-    properties_with_images = Property.query.filter_by(for_rent=False).options(db.joinedload('images')).all()
-    return render_template('sale.html', properties_with_images=properties_with_images)
-
-
-@app.route('/rent')
-def get_rent():
-    """Retrieves all properties for rent"""
-    properties_with_images = Property.query.filter_by(for_rent=True).options(db.joinedload('images')).all()
-    return render_template('rent.html', properties_with_images=properties_with_images)
-
-
 @app.route('/property_details/<int:property_id>')
 def property_details(property_id):
     """Retrieves property details"""
