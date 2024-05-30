@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/update_profile.css') }}">
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Update Profile</h2>
+        <form id="update-profile-form">
+            <div class="profile-item">
+                <label for="firstname">First Name:</label>
+                <input type="text" id="firstname" name="firstname" value="{{ user.firstname }}">
+            </div>
+            <div class="profile-item">
+                <label for="lastname">Last Name:</label>
+                <input type="text" id="lastname" name="lastname" value="{{ user.lastname }}">
+            </div>
+            <div class="profile-item">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="profile-item">
+                <label for="agency">Agency:</label>
+                <input type="text" id="agency" name="agency" value="{{ user.agency }}">
+            </div>
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

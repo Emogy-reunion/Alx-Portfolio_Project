@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/details.css') }}">
+    <title>RENT</title>
+</head>
+<body>
+    {% with property=property_with_images %}
+    <div class="slider-container">
+        <div class="slides">
+            {% for image in property.images %}
+                <div class="slide">
+                    <img src="{{ url_for('uploaded_files', filename=image.filename) }}" alt="{{ image.filename }}">
+                </div>
+            {% endfor %}
+        </div>
+        <div class="navigation">
+            <button class="nav-button" id="prev"><i class='bx bx-left-arrow-alt'></i></button>
+            <button class="nav-button" id="next"><i class='bx bx-right-arrow-alt'></i></button>
+        </div>
+    </div>
+    <h2><strong>Location: </strong>{{ property.location }}</h2>
+    <p><strong>Price: </strong>{{ property.price }}</p>
+    <p><strong>Bedrooms: </strong>{{ property.bedrooms }}</p>
+    <h2>Features</h2>
+    <p>{{ property.features }}</p>
+    <h2>Description</h2>
+    <p>{{ property.description }}</p>
+    {% endwith %}
+    <script src="{{ url_for('static', filename='js/details.js') }}"></script>
+</body>
+</html>

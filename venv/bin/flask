@@ -1,4 +1,4 @@
-#!/Alx-Portfolio_Project/venv/bin/python3
+#!/Alx-Portfolio_Project/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

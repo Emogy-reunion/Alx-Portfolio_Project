@@ -321,7 +321,7 @@ def display_profile():
 
 @app.route('/update_profile', methods=['GET', 'PATCH'])
 @login_required
-def update_profile:
+def update_profile():
     user = User.query.get(current_user.id)
 
     if not user or user.id != current_user.id:

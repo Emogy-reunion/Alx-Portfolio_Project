@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uploads/css/profile.css') }}">
+</head>
+<body>
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        <div class="profile-details">
+            <div class="profile-item">
+                <strong>First Name:</strong>
+                <span>{{ user.firstname }}</span>
+            </div>
+            <div class="profile-item">
+                <strong>Last Name:</strong>
+                <span>{{ user.lastname }}</span>
+            </div>
+            <div class="profile-item">
+                <strong>Email:</strong>
+                <span>{{ user.email }}</span>
+            </div>
+            <div class="profile-item">
+                <strong>Phone Number:</strong>
+                <span>{{ user.phone_number }}</span>
+            </div>
+            <div class="profile-item">
+                <strong>Agency:</strong>
+                <span>{{ user.agency }}</span>
+            </div>
+        </div>
+        <button id="edit-profile">Edit Profile</button>
+    </div>
+    <script src="{{ url_for('static', filename='uploads/js/profile.js') }}"></script>
+</body>
+</html>
