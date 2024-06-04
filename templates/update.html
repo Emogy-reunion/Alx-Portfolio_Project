@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Property</title>
+</head>
+<body>
+    <h2>Update Property</h2>
+    <form id="update-form">
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ property1.location }}" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="{{ property1.price }}" required>
+        </div>
+        <div class="form-group">
+            <label for="bedrooms">Bedrooms:</label>
+            <input type="number" id="bedrooms" name="bedrooms" value="{{ property1.bedrooms }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ property1.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="features">Features:</label>
+            <textarea id="features" name="features" required>{{ property1.features }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="for_rent">For Rent:</label>
+            <select id="for_rent" name="for_rent" required>
+                <option value="True" {% if property1.for_rent %} selected {% endif %}>Yes</option>
+                <option value="False" {% if not property1.for_rent %} selected {% endif %}>No</option>
+            </select>
+        </div>
+        <button type="submit" id="update-btn">Update</button>
+    </form>
+
+    <script>
+        document.getElementById('update-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData();
+
+    // Append updated property data to FormData object
+    formData.append('location', document.getElementById('location').value);
+    formData.append('price', document.getElementById('price').value);
+    formData.append('bedrooms', document.getElementById('bedrooms').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('features', document.getElementById('features').value);
+    formData.append('for_rent', document.getElementById('for_rent').value);
+
+    // Send a PATCH request to update the property
+    fetch(`/update_property/{{ property1.id }}`, {
+        method: 'PATCH',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Property updated successfully.');
+            window.location.href = '/uploads';
+        } else {
+            alert('Failed to update property.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating property.');
+    });
+});
+        </script>
+</body>
+</html>

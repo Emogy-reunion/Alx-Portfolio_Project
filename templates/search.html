@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Search</title>
+</head>
+<body>
+    <h1>Search Properties</h1>
+    <form id="search-form">
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location">
+        </div>
+        <div>
+            <label for="min-price">Min Price</label>
+            <input type="number" id="min-price" name="min_price">
+        </div>
+        <div>
+            <label for="max-price">Max Price</label>
+            <input type="number" id="max-price" name="max_price">
+        </div>
+        <div>
+            <label for="bedrooms">Bedrooms</label>
+            <input type="number" id="bedrooms" name="bedrooms">
+        </div>
+        <button type="submit">Search</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetchProperties();
+        });
+
+        function fetchProperties() {
+            const location = document.getElementById('location').value;
+            const minPrice = document.getElementById('min-price').value;
+            const maxPrice = document.getElementById('max-price').value;
+            const bedrooms = document.getElementById('bedrooms').value;
+
+            let query = `?location=${location}&min_price=${minPrice}&max_price=${maxPrice}&bedrooms=${bedrooms}`;
+
+            fetch(`/search${query}`)
+                .then(response => response.json())
+                .then(data => displayProperties(data))
+                .catch(error => console.error('Error fetching properties:', error));
+        }
+
+        function displayProperties(properties) {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+
+            if (properties.error) {
+                results.innerHTML = '<p>No properties found.</p>';
+                return;
+            }
+
+            properties.forEach(property => {
+                const propertyDiv = document.createElement('div');
+                propertyDiv.innerHTML = `
+                    <h2>${property.location}</h2>
+                    <p>Price: $${property.price}</p>
+                    <p>Bedrooms: ${property.bedrooms}</p>
+                    <p>Description: ${property.description}</p>
+                    <p>Features: ${property.features}</p>
+                    ${property.image_filename ? `<img src="/uploads/${property.image_filename}" alt="Property Image">` : ''}
+                `;
+                results.appendChild(propertyDiv);
+            });
+        }
+    </script>
+</body>
+</html>

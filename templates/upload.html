@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Upload</title>
+</head>
+<body>
+    <h2>Upload Property Details</h2>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" required>
+        </div>
+        <div class="form-group">
+            <label for="bedrooms">Bedrooms:</label>
+            <input type="number" id="bedrooms" name="bedrooms" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="features">Features:</label>
+            <textarea id="features" name="features" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="for_rent">For Rent:</label>
+            <select id="for_rent" name="for_rent" required>
+                <option value="True">Yes</option>
+                <option value="False">No</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="image">Select Images:</label>
+            <input type="file" id="image" name="image" accept="image/*" multiple required>
+        </div>
+        <div id="image-preview"></div>
+        <button type="submit" id="upload-btn">Upload</button>
+    </form>
+
+
+  <script>
+    // JavaScript for handling image selection and preview
+    document.getElementById('image').addEventListener('change', function() {
+      const preview = document.getElementById('image-preview');
+      preview.innerHTML = '';
+      const files = Array.from(this.files);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'remove';
+          deleteBtn.classList.add('remove-btn');
+          deleteBtn.addEventListener('click', function() {
+            preview.removeChild(item);
+          });
+
+          const item = document.createElement('div');
+          item.classList.add('image-preview-item');
+          item.appendChild(img);
+          item.appendChild(deleteBtn);
+          preview.appendChild(item);
+        }
+        reader.readAsDataURL(file);
+      });
+    });
+
+        document.getElementById('upload-btn').addEventListener('click', function(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  const location = document.getElementById('location').value;
+  const price = document.getElementById('price').value;
+  const bedrooms = document.getElementById('bedrooms').value;
+  const description = document.getElementById('description').value;
+  const features = document.getElementById('features').value;
+  const forRent = document.getElementById('for_rent').value;
+  const images = document.getElementById('image').files;
+
+  // Create a new FormData object
+  const formData = new FormData();
+  formData.append('location', location);
+  formData.append('price', price);
+  formData.append('bedrooms', bedrooms);
+  formData.append('description', description);
+  formData.append('features', features);
+  formData.append('for_rent', forRent);
+
+  for (let i = 0; i < images.length; i++) {
+    formData.append('image' + i, images[i]);
+  }
+
+  // Send the form data to the server using Fetch API
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) {
+      // Handle success
+      alert('Property details uploaded successfully.');
+    } else {
+      // Handle error
+      alert('Failed to upload property details.');
+    }
+  })
+  .catch(error => {
+    // Handle error
+    console.error('Error:', error);
+    alert('An error occurred while uploading property details.');
+  });
+});
+  </script>
+</body>
+</html>
