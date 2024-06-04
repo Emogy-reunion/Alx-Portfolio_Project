@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.1/css/boxicons.min.css">
-      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap" rel="stylesheet">
   <link rel="icon" type="image/jpeg" href="alpha.jpg">
   <title>Home page</title>
@@ -13,19 +13,19 @@
   <nav>
     <ul class="sidebar">
       <li onclick="hideSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
-      <li><a href="{{ url_for('index') }}">Home</a></li>
-      <li><a href="{{ url_for('buy') }}">Buy</a></li>
-      <li><a href="{{ url_for('Rent') }}">Rent</a></li>
-      <li><a href="{{ url_for('login') }}">Login</a></li>
-      <li><a href="{{ url_for('search') }}">search</a></li>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('uploads') }}">Uploads</a></li>
+      <li><a href="{{ url_for('search') }}">Search</a></li>
+      <li><a href="{{ url_for('profile') }}">Profile</a></li>
+      <li><a href="{{ url_for('logout') }}">Logout</a></li>
     </ul>
 
     <ul>
-      <li class="hideOnMobile"><a href="{{ url_for('index') }}">Home</a></li>
-      <li class="hideOnMobile"><a href="{{ url_for('buy') }}">Buy</a></li>
-      <li class="hideOnMobile"><a href="{{ url_for('rent') }}">Rent</a></li>
-      <li class="hideOnMobile"><a href="{{ url_for('login') }}">Login</a></li>
-      <li class="hideOnMobile"><a href="{{ url_for('search') }}">Search</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('uploads') }}">Uploads</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('Search') }}">Search</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('profile') }}">Profile</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('logout') }}">Logout</a></li>
       <li class="menu-button" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
     </ul>
   </nav>
