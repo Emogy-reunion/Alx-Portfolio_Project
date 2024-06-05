@@ -28,16 +28,7 @@
     </ul>
   </nav> 
 
-	<div id="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+<div id="container">
 
     <form id="login-form">
         <div>
@@ -52,9 +43,11 @@
 	<div class="button-container">
         	<button type="submit">Login</button>
 	</div>
+	<p id="error-message" style="color: red; display: none;"></p>
     </form>
     <p>Don't have an account yet? <a href="{{ url_for('register') }}">Sign up</a></p>
-	</div>
+</div>
+
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>

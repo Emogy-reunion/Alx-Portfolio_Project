@@ -219,3 +219,20 @@ form .button-container {
     display: flex;
     justify-content: center;
 }
+
+
+.flash-messages {
+    width: 300px;
+    margin: 20px auto;
+}
+
+.flash {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

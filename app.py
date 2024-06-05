@@ -38,7 +38,7 @@ class User(UserMixin, db.Model):
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), unique=False, nullable=False)
+    password = db.Column(db.String(255), unique=False, nullable=False)
     phone_number = db.Column(db.String(50), unique=False, nullable=False)
     agency = db.Column(db.String(50), unique=False, nullable=False)
     properties = relationship('Property', backref='user', lazy=True)
@@ -109,14 +109,15 @@ def load_user(user_id):
 def login():
     """handles login request"""
     if request.method == 'POST':
-        email = request.form['email']
+        email = request.form['email'].lower()
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        if user and check_password_hash(user.password, password):
+        #if user and check_password_hash(user.password, password):
+        if user and user.password == password:
             login_user(user)
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid username or password. Please try again.', 'error')
+            return jsonify({'error': 'Invalid username or password. Please try again.'}), 401
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'], endpoint='register')
@@ -125,15 +126,15 @@ def register():
     if request.method == 'POST':
         firstname = request.form['first_name']
         lastname = request.form['last_name']
-        email = request.form['email']
+        email = request.form['email'].lower()
         phone_number = request.form['phone_number']
         agency = request.form['agency']
         password = request.form['password']
         if User.query.filter_by(email=email).first():
-            flash('There is an account associated with this email.')
+            return jsonify({'error': 'There is an account associated with this email.'}), 400
         else:
-            hashed_password = generate_password_hash(password)
-            new_user = User(firstname=firstname, lastname=lastname, email=email, phone_number=phone_number, agency=agency, password=hashed_password)
+            #hashed_password = generate_password_hash(password)
+            new_user = User(firstname=firstname, lastname=lastname, email=email, phone_number=phone_number, agency=agency, password=password)
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))

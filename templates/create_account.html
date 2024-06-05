@@ -31,12 +31,13 @@
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" maxlength="12" required>
             <span class="toggle-password">Show</span>
         </div>
 	<div class="button-container">
 	        <button type="submit">Create Account</button>
 	</div>
+	<p id="error-message" style="color: red; display: none;"></p>
     </form>
     </div>
     <script src="{{ url_for('static', filename='js/register.js') }}"></script>

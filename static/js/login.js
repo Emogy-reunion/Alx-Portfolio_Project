@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
 
     loginForm.addEventListener('submit', function(event) {
@@ -43,16 +43,28 @@ document.addEventListener('DOMContentLoaded', function() {
             body: formData
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Invalid username or password. Please try again.');
+            if (response.redirected) {
+                // Handle the redirection
+                window.location.href = response.url;
+            } else {
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        throw new Error(data.error);
+                    }
+                });
             }
         })
         .catch(error => {
-            alert(error.message);
+            const errorContainer = document.getElementById('error-message');
+            if (errorContainer) {
+                errorContainer.textContent = error.message;
+                errorContainer.style.display = 'block';
+            } else {
+                alert(error.message);
+            }
         });
     });
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
