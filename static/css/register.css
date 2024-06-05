@@ -1,0 +1,82 @@
+*{
+    margin: 0;
+    padding: 0;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: pink;
+    font-family: Verdana, Geneva, sans-serif;
+    overflow-x: hidden;
+
+}                                                                                                                                                                                                         
+
+p{
+    margin-right: 5px;
+    color: white;
+}
+
+#container {
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+form {
+    max-width: 600px;
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+form .toggle-password {
+    display: inline-block;
+    margin-top: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #007bff;
+}
+
+
+form button{
+	width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+form button:hover {
+	background-color: #0056b3;
+}

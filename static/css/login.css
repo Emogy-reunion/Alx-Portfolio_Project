@@ -7,10 +7,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url("/static/css/form.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-position: center;
+    background-color: #ffcdcb;
     font-family: Verdana, Geneva, sans-serif;
     overflow-x: hidden;
 
@@ -168,7 +165,7 @@ nav ul a.active {
     width: 80%;
     border: 1px solid silver;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: silver;
 }
 
@@ -182,9 +179,10 @@ nav ul a.active {
     font-weight: bold;
 }
 
-#login-form input[type="email"],
-#login-form input[type="password"] {
-    width: 90%;
+form input,
+form select,
+form textarea {
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 3px;
