@@ -167,10 +167,115 @@ nav ul a.active {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-image: url("home.jpg");
+    background-image: url("/static/css/home.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;
+    position: relative;
 }
 
+.message {
+    color: gold;
+    margin-left: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.message span {
+    display: inline-block;
+    animation: slide-in 0.5s forwards;
+}
+
+
+.message span:nth-child(1) {
+    animation-delay: 0.2s;
+}
+.message span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+.message span:nth-child(3) {
+    animation-delay: 0.6s;
+}
+.message span:nth-child(4) {
+    animation-delay: 0.8s;
+}
+.message span:nth-child(5) {
+    animation-delay: 1s;
+}
+.message span:nth-child(6) {
+    animation-delay: 1.2s;
+}
+.message span:nth-child(7) {
+    animation-delay: 1.4s;
+}
+.message span:nth-child(8) {
+    animation-delay: 1.6s;
+}
+
+
+
+
+@media screen and (max-width: 767px) {
+
+	@media screen and (orientation: portrait) {
+    		.home-section {
+        	background-image: url("/static/css/home.jpg");
+        	height: 50vh;
+    		}
+
+		.about-section {
+			height: 50vh;
+		}
+
+		.message {
+			margin-left: 48px;
+		}
+	}
+
+
+	@media screen and (orientation: landscape) {
+    		.home-section {
+        	background-image: url("/static/css/home.jpg");
+        	height: 500px;
+    		}
+
+		.about-section {
+                        height: auto;
+                }
+
+		.message {
+		margin-left: 80px;
+		}
+	}
+}
+
+
+.about-section {
+    width: 100%;
+    background-color: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-section h1 {
+    color: #B76E79;
+}
+
+.about-section p {
+    color: white;
+    width: 90%;
+    font-size: 18px;
+    overflow: wrap;
+}
