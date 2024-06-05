@@ -1,10 +1,62 @@
+function checkScreenWidth() {
+    if (window.innerWidth > 800) {
+        hideSidebar();
+    }
+}
+
+function showSidebar(){
+        const sidebar = document.querySelector('.sidebar')
+        sidebar.style.display = 'flex'
+}
+
+ function hideSidebar() {
+         const sidebar = document.querySelector('.sidebar')
+         sidebar.style.display = 'none'
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var links = document.querySelectorAll('nav ul a');
+
+    links.forEach(function(link) {
+        link.addEventListener('click', function() {
+            // Remove active class from all links
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
+
+            // Add active class to the clicked link
+            this.classList.add('active');
+        });
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    var loginForm = document.getElementById('login-form');
-    var emailInput = document.getElementById('email');
-    var passwordInput = document.getElementById('password');
-    var emailError = document.getElementById('email-error');
-    var passwordError = document.getElementById('password-error');
-    var togglePassword = document.querySelector('.toggle-password');
+    const loginForm = document.getElementById('login-form');
+
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(loginForm);
+        fetch('/login', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Invalid username or password. Please try again.');
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.querySelector('.toggle-password');
 
     togglePassword.addEventListener('click', function() {
         if (passwordInput.type === 'password') {
@@ -15,65 +67,4 @@ document.addEventListener('DOMContentLoaded', function() {
             togglePassword.textContent = 'Show';
         }
     });
-
-    loginForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        emailError.textContent = '';
-        passwordError.textContent = '';
-        var email = emailInput.value.trim();
-        var password = passwordInput.value.trim();
-        var valid = true;
-
-        if (!email) {
-            emailError.textContent = 'Email is required.';
-            valid = false;
-        } else if (!validateEmail(email)) {
-            emailError.textContent = 'Invalid email format.';
-            valid = false;
-        }
-
-        if (!password) {
-            passwordError.textContent = 'Password is required.';
-            valid = false;
-        }
-
-        if (valid) {
-            var formData = new FormData(loginForm);
-
-            fetch('/upload', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                if (data.success) {
-                    window.location.href = data.redirect_url;
-                } else {
-                    if (data.errors.email) {
-                        emailError.textContent = data.errors.email;
-                    }
-                    if (data.errors.password) {
-                        passwordError.textContent = data.errors.password;
-                    }
-                }
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-                emailError.textContent = 'An error occurred. Please try again.';
-            });
-        }
-    });
-
-    function validateEmail(email) {
-        var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
 });
-
-
-
