@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 #configure sqlalchemy, flask login
 app.config['SECRET_KEY'] = 'MY_KEY'
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://emogyreunion:mark734@localhost/realestate"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://emogyreunion:Mark734$@localhost/realestate'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
