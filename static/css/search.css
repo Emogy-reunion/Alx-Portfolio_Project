@@ -12,6 +12,11 @@ body {
     overflow-x: hidden;
 
 }                                                                                                                                                                                                         
+h1 {
+	padding-top: 60px;
+	color: #B76E79;
+	text-align: center;
+}
 
 p{
     margin-right: 5px;
@@ -146,37 +151,21 @@ nav ul a.active {
 
 }
 
-
-
-#container {
-    height: 100vh;
-    width: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#login-form {
+form {
     max-width: 600px;
-    margin: 20px;
-    padding: 20px;
     width: 80%;
+    margin: 20px auto;
+    padding: 20px;
     border: 1px solid silver;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
 }
 
-#login-form div {
-    margin-bottom: 15px;
-}
-
-#login-form label {
-    font-weight: bold;
+form label {
     display: block;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 form input,
@@ -190,13 +179,14 @@ form textarea {
     font-size: 14px;
 }
 
-.toggle-password {
+form .toggle-password {
     display: inline-block;
     margin-top: 5px;
     cursor: pointer;
     font-size: 12px;
     color: #007bff;
 }
+
 
 form button{
 	padding: 15px;
@@ -210,9 +200,8 @@ form button{
 	border-radius: 30px;
 }
 
-#login-form button:hover {
-    background-color: gold;
-    color: #0598ce;
+form button:hover {
+	background-color: #0056b3;
 }
 
 form .button-container {
