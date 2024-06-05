@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -70,7 +70,7 @@ class Image(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/', endpoint='home')
+@app.route('/', endpoint='index')
 def index():
     """render home page for the main site"""
     return render_template('index.html')
@@ -83,13 +83,13 @@ def about():
 @app.route('/buy', endpoint='buy')
 def buy():
     """renders the buy page of the main site"""
-    properties = Property.query.filter_by(for_rent=False).options(db.joinedload('images')).all()
+    properties = Property.query.filter_by(for_rent=False).options(db.joinedload(Property.images)).all()
     return render_template('sale.html', properties=properties)
 
 @app.route('/rent', endpoint='rent')
 def rent():
     """retrieves properties for rent"""
-    properties = Property.query.filter_by(for_rent=True).options(db.joinedload('images')).all()
+    properties = Property.query.filter_by(for_rent=True).options(db.joinedload(Property.images)).all()
     return render_template('rent.html', properties=properties)
 
 @app.route('/uploads/<filename>')
@@ -203,14 +203,14 @@ def allowed_file(filename):
 def uploads():
     """Retrieves property associated with a user"""
     user_id = current_user.id
-    properties_with_images = Property.query.filter_by(user_id=user_id).options(db.joinedload('images')).all()
+    properties_with_images = Property.query.filter_by(user_id=user_id).options(db.joinedload(Property.images)).all()
     return render_template('uploads.html', properties_with_images=properties_with_images)
 
 @app.route('/details/<int:property_id>')
 @login_required
 def details(property_id):
     """Retrieves property details"""
-    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
+    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload(Property.images)).first()
     return render_template('details.html', property_with_images=property_with_images)
 
 
@@ -303,7 +303,7 @@ def send_email(user_id):
 @app.route('/property_details/<int:property_id>')
 def property_details(property_id):
     """Retrieves property details"""
-    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload('images')).first()
+    property_with_images = Property.query.filter_by(id=property_id).options(db.joinedload(Property.images)).first()
     if not property_with_images:
         return "Property not found", 404
     return render_template('property_details.html', property_with_images=property_with_images)
@@ -377,6 +377,10 @@ def logout():
     flash('Logged out successfully', 'success')
     return redirect(url_for('home'))
 
+@app.route('/search_html')
+def search_html():
+    return render_template('search.html')
+
 @app.route('/search')
 def search():
     location = request.args.get('location')
@@ -384,21 +388,21 @@ def search():
     max_price = request.args.get('max_price', type=float)
     bedrooms = request.args.get('bedrooms', type=int)
 
-    query = query.Property
+    query = Property.query
 
     if location:
-        query = query.filter_by(Property.location.ilike(f"%{location}%"))
+        query = query.filter(Property.location.ilike(f"%{location}%"))
 
     if min_price is not None:
         query = query.filter_by(Property.price >= min_price)
 
     if max_price is not None:
-        query = query.filter_by(Property.price >= max_price)
+        query = query.filter_by(Property.price <= max_price)
     
     if bedrooms is not None:
         query = query.filter_by(Property.bedrooms == bedrooms)
     
-    properties = query.options(db.joinedload('images')).all()
+    properties = query.options(db.joinedload(Property.images)).all()
 
     result = []
 
