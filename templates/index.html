@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.1/css/boxicons.min.css">
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/jpeg" href="alpha.jpg">
   <title>Home page</title>
 </head>
 <body>
@@ -29,5 +28,20 @@
       <li class="menu-button" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
     </ul>
   </nav>
+
+  <div class="home-section">
+	<div class="message">
+        	<h1><span>W</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span><span>...</span></h1>
+    </div>
+  </div>
+
+  <div class="about-section">
+    <h1>About Us</h1>
+    <p>Our app aims to connect property owners with clients in the real estate industry. Property agents can log in to post properties, while clients can browse and search for properties without the need to log in.</p>
+    <p>Our goal is to streamline the process of finding, buying, and renting properties by providing a user-friendly platform for both property owners and clients.</p>
+    <p>With our app, property owners can easily showcase their properties to a wide audience, while clients can effortlessly find their dream homes or investment properties.</p>
+</div>
+
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>

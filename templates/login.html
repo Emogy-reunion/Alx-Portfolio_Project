@@ -8,7 +8,37 @@
 </head>
 <body>
     <h2>Login</h2>
-    <form id="login-form">
+
+    <ul class="sidebar">
+      <li onclick="hideSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('buy') }}">Buy</a></li>
+      <li><a href="{{ url_for('rent') }}">Rent</a></li>
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      <li><a href="{{ url_for('search_html') }}">search</a></li>
+    </ul>
+
+    <ul>
+      <li class="hideOnMobile"><a href="{{ url_for('index') }}">Home</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('buy') }}">Buy</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('rent') }}">Rent</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('login') }}">Login</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('search_html') }}">Search</a></li>
+      <li class="menu-button" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+    </ul>
+  </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form id="login-form" method="POST" action="{{ url_for('login') }}">
         <div>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
@@ -22,7 +52,7 @@
         </div>
         <button type="submit">Login</button>
     </form>
+    <p>Don't have an account yet? <a href="{{ url_for('register') }}">Sign up</a></p>
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>
-

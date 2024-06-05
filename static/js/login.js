@@ -18,10 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        
         emailError.textContent = '';
         passwordError.textContent = '';
-
         var email = emailInput.value.trim();
         var password = passwordInput.value.trim();
         var valid = true;
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (valid) {
             var formData = new FormData(loginForm);
 
-            fetch('/login', {
+            fetch('/upload', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -50,20 +48,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .then(function(response) {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    return response.text();
-                }
+                return response.json();
             })
-            .then(function(text) {
-                if (text) {
-                    alert(text);
+            .then(function(data) {
+                if (data.success) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    if (data.errors.email) {
+                        emailError.textContent = data.errors.email;
+                    }
+                    if (data.errors.password) {
+                        passwordError.textContent = data.errors.password;
+                    }
                 }
             })
             .catch(function(error) {
                 console.error('Error:', error);
-                alert('An error occurred while submitting the form.');
+                emailError.textContent = 'An error occurred. Please try again.';
             });
         }
     });
@@ -73,4 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return re.test(email);
     }
 });
+
+
 
