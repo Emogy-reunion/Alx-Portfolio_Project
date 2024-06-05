@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 import os
 from flask_mail import Mail, Message
 
@@ -141,7 +141,7 @@ def register():
     return render_template('create_account.html')
 
 
-@app.route('/dashboard', methods=['POST'], endpoint='dashboard')
+@app.route('/dashboard', methods=['GET'], endpoint='dashboard')
 @login_required
 def dashboard():
     """render logged in users dashboard"""
@@ -312,7 +312,7 @@ def property_details(property_id):
 
 @app.route('/display_profile')
 @login_required
-def display_profile():
+def profile():
     """route to retrieve tge current usrr's profile info"""
     user = User.query.get(current_user.id)
 
@@ -375,8 +375,7 @@ def delete_profile():
 def logout():
     """logs out the user"""
     logout_user()
-    flash('Logged out successfully', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 @app.route('/search_html')
 def search_html():
