@@ -1,0 +1,176 @@
+*{
+
+    margin: 0;
+    padding: 0;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: silver;
+    font-family: Verdana, Geneva, sans-serif;
+    overflow-x: hidden;
+
+}
+
+
+
+p{
+    margin-right: 5px;
+    color: white;
+}
+
+
+
+nav{
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    padding: 0 20px;
+    height: 38px;
+    width: 38px;
+    margin: auto 0;
+}
+
+.logo img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+nav ul{
+    width: 100%;
+    list-style: none;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+
+nav li{
+    height: 50px; /*height of navbar*/
+}
+
+
+
+nav a{
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: papayawhip;
+}
+
+
+
+nav a:hover{
+    background-color: greenyellow;
+    color: black;
+    font-weight: bold;
+}
+
+nav ul a.active {
+	color: beige;
+	background-color: chocolate;
+	font-weight: bold
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: auto;
+    width: 150px;
+    z-index: 999;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 10px 0 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+
+.sidebar li{
+    width: 100%;
+}
+
+
+
+.sidebar a{
+    width: 100%;
+    color: gold;
+}
+
+.menu-button{
+    display: none;
+}
+
+.menu-button svg path {
+	fill: chocolate;
+}
+
+@media screen and (max-width: 768px){
+    .hideOnMobile{
+
+        display: none;
+    }
+
+    .menu-button{
+
+        display: block;
+
+    }
+
+}
+
+
+
+@media screen and (max-width: 400px){
+
+    .sidebar{
+
+        width: 100%;
+
+    }
+
+}
+
+
+
+@media(min-width: 769px){
+
+    .sidebar{
+
+        display: none;
+
+    }
+
+}
+
+.home-section {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("home.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+
