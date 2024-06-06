@@ -3,10 +3,32 @@
 <head>
 <meta charset="UTF-8">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/upload.css') }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Property Upload</title>
 </head>
 <body>
+    
+    <nav>
+    <ul class="sidebar">
+      <li onclick="hideSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('buy') }}">Buy</a></li>
+      <li><a href="{{ url_for('rent') }}">Rent</a></li>
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      <li><a href="{{ url_for('search_html') }}">search</a></li>
+    </ul>
+
+    <ul>
+      <li class="hideOnMobile"><a href="{{ url_for('index') }}">Home</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('buy') }}">Buy</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('rent') }}">Rent</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('login') }}">Login</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('search_html') }}">Search</a></li>
+      <li class="menu-button" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+    </ul>
+  </nav>
+    
     <h2>Upload Property Details</h2>
     <form action="/upload" method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -41,7 +63,9 @@
             <input type="file" id="image" name="image" accept="image/*" multiple required>
         </div>
         <div id="image-preview"></div>
-        <button type="submit" id="upload-btn">Upload</button>
+	<div class="button-container">
+             <button type="submit" id="upload-btn">Upload</button>
+	</div>
     </form>
 
 
@@ -58,7 +82,7 @@
           img.src = e.target.result;
 
           const deleteBtn = document.createElement('button');
-          deleteBtn.textContent = 'remove';
+          deleteBtn.textContent = 'X';
           deleteBtn.classList.add('remove-btn');
           deleteBtn.addEventListener('click', function() {
             preview.removeChild(item);
@@ -117,6 +141,42 @@
     console.error('Error:', error);
     alert('An error occurred while uploading property details.');
   });
+});
+
+
+window.onload = checkScreenWidth;
+window.onresize = checkScreenWidth;
+
+function checkScreenWidth() {
+    if (window.innerWidth > 800) {
+        hideSidebar();
+    }
+}
+
+function showSidebar(){
+        const sidebar = document.querySelector('.sidebar')
+        sidebar.style.display = 'flex'
+}
+
+ function hideSidebar() {
+         const sidebar = document.querySelector('.sidebar')
+         sidebar.style.display = 'none'
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var links = document.querySelectorAll('nav ul a');
+
+    links.forEach(function(link) {
+        link.addEventListener('click', function() {
+            // Remove active class from all links
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
+
+            // Add active class to the clicked link
+            this.classList.add('active');
+        });
+    });
 });
   </script>
 </body>

@@ -173,3 +173,87 @@ nav ul a.active {
     background-position: center;
     position: relative;
 }
+
+
+@media screen and (max-width: 767px) {
+
+	@media screen and (orientation: portrait) {
+    		.home-section {
+        	background-image: url("/static/css/dashboard.gif");
+        	height: 50vh;
+    		}
+
+		.about-section {
+			height: 50vh;
+		}
+
+		.message {
+			margin-left: 48px;
+		}
+	}
+
+
+	@media screen and (orientation: landscape) {
+    		.home-section {
+        	background-image: url("/static/css/dashboard.gif");
+        	height: 500px;
+    		}
+
+		.about-section {
+                        height: auto;
+                }
+
+		.message {
+		margin-left: 80px;
+		}
+	}
+}
+
+
+.message {
+    color: gold;
+    margin-left: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.message span {
+    display: inline-block;
+    animation: slide-in 0.5s forwards;
+}
+
+
+.message span:nth-child(1) {
+    animation-delay: 0.2s;
+}
+.message span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+.message span:nth-child(3) {
+    animation-delay: 0.6s;
+}
+.message span:nth-child(4) {
+    animation-delay: 0.8s;
+}
+.message span:nth-child(5) {
+    animation-delay: 1s;
+}
+.message span:nth-child(6) {
+    animation-delay: 1.2s;
+}
+.message span:nth-child(7) {
+    animation-delay: 1.4s;
+}
+.message span:nth-child(8) {
+    animation-delay: 1.6s;
+}
