@@ -73,7 +73,7 @@ with app.app_context():
 @app.route('/', endpoint='index')
 def index():
     """render home page for the main site"""
-    return render_template('index.html')
+    return render_template('landing.html')
 
 @app.route('/about', endpoint='about')
 def about():
