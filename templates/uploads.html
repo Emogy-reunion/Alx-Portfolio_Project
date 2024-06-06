@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/uploads.css') }}">
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uploads.css') }}">
     <title>UPLOADS</title>
 </head>
 <body>
@@ -39,7 +39,12 @@
                     <div class="description">
                         <h2>{{ property_item.location }}</h2>
                         <p>ksh <span class="price">{{ property_item.price }}</span>/month</p>
-                        <p>{{ property_item.bedrooms }} bedrooms</p>
+			<p>{{ property_item.bedrooms }} bedrooms</p>
+			<div class="action-links">
+                             <a href="#" class="delete-link" data-property_id="{{ property_item.id }}" onclick="return confirm('Are you sure you want to delete this property?')"><i class='bx bxs-trash'></i></a>
+                            <a href="{{ url_for('update_property', property_id=property_item.id) }}"><i class='bx bx-edit'></i></a>
+     
+                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -47,7 +52,45 @@
             <p class="default">No Properties Available</p>
         {% endif %}
     </div>
-
    <script src="{{ url_for('static', filename='js/uploads.js') }}"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+    const deleteLinks = document.querySelectorAll('.delete-link');
+
+    deleteLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const propertyId = link.dataset.property_id;
+
+            if (confirm('Are you sure you want to delete this property?')) {
+                fetch(`/delete_property/${propertyId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        link.closest('.item').remove();
+                        alert('Property deleted successfully.');
+                    } else {
+                        alert('Failed to delete property.');
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            }
+        });
+    });
+});
+
+	</script>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/details.css') }}">
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/update.css') }}">
     <title>RENT</title>
 </head>
 <body>
@@ -12,7 +13,7 @@
         <div class="slides">
             {% for image in property.images %}
                 <div class="slide">
-                    <img src="{{ url_for('uploaded_files', filename=image.filename) }}" alt="{{ image.filename }}">
+                    <img src="{{ url_for('uploaded_file', filename=image.filename) }}" alt="{{ image.filename }}">
                 </div>
             {% endfor %}
         </div>

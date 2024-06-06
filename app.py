@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
+from flask import Flask, render_template, url_for, redirect, request, flash, jsonify, send_from_directory
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'MY_KEY'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://emogyreunion:Mark734$@localhost/realestate'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = '/var/www/portfolio/static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['MAIL_SERVER'] = 'smtp@gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -52,8 +52,8 @@ class Property(db.Model):
     location = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
     bedrooms = db.Column(db.Integer, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    features = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    features = db.Column(db.String(250), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     for_rent = db.Column(db.Boolean, nullable=False)
     images = relationship('Image', backref='property', lazy=True, cascade='all, delete-orphan')
@@ -160,24 +160,21 @@ def upload():
         for_rent = request.form['for_rent'].lower() == 'true'
         user_id = current_user.id
 
-        my_property = Property(location=location, price=price, bedrooms=bedrooms, user_id=user_id, for_rent=for_rent)
+        my_property = Property(location=location, price=price, bedrooms=bedrooms, user_id=user_id, for_rent=for_rent, description=description, features=features)
         db.session.add(my_property)
         db.session.commit()
 
         if 'images' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return jsonify(message='No file part', redirect_url=request.url), 400
 
-        images = request.files.getlist('image[]')
+        images = request.files.getlist('images')
         if not images:
-            flash('No selected files')
-            return redirect(request.url)
+            return jsonify(message='No selected files', redirect_url=request.url), 400
 
         saved_files = []
         for image in images:
             if image.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
+                return jsonify(message='No selected file', redirect_url=request.url), 400
 
             if image and allowed_file(image.filename):
                 filename = secure_filename(image.filename)
@@ -186,11 +183,11 @@ def upload():
                 db.session.add(new_image)
                 saved_files.append(filename)
 
+        db.session.commit()
+
         if not saved_files:
-            flash('No files saved')
-            return redirect(request.url)
+            return jsonify(message='No files saved', redirect_url=request.url), 400
         else:
-            flash('Files saved successfully!')
             return redirect(url_for('uploads'))
 
     return render_template('upload.html')
@@ -215,19 +212,17 @@ def details(property_id):
     return render_template('details.html', property_with_images=property_with_images)
 
 
+
 @app.route('/delete_property/<int:property_id>', methods=['POST'])
 @login_required
 def delete_property(property_id):
-    """Deletes a property based on its property_id"""
-    property1 = Property.query.filter_by(id=property_id)
+    property1 = Property.query.filter_by(id=property_id).first()
     if property1 and property1.user_id == current_user.id:
         db.session.delete(property1)
         db.session.commit()
-        flash('Property deleted successfully.')
+        return jsonify({'success': True}), 200
     else:
-        flash('Property not found or you do not have permission to delete it.')
-
-    return redirect(url_for('uploads'))
+        return jsonify({'success': False, 'error': 'Property not found or you do not have permission to delete it.'}), 403
 
 @app.route('/update_property/<int:property_id>', methods=['GET', 'PATCH'])
 @login_required
@@ -236,40 +231,42 @@ def update_property(property_id):
     property1 = Property.query.get_or_404(property_id)
     
     if property1.user_id != current_user.id:
-        flash('Unauthorized access', 'error')
-        return redirect(url_for('uploads'))
+        return jsonify({'success': False, 'message': 'Unauthorized access'}), 403
     
     if request.method == 'GET':
         return render_template('update.html', property1=property1)
     
     if request.method == 'PATCH':
-        data = request.form
-        
-        if not data:
-            flash('Bad Request', 'error')
-            return redirect(url_for('uploads'))
-        
-        if 'location' in data:
-            property1.location = data['location']
-        
-        if 'price' in data:
-            property1.price = float(data['price'])
-        
-        if 'bedrooms' in data:
-            property1.bedrooms = int(data['bedrooms'])
-        
-        if 'features' in data:
-            property1.features = data['features']
-        
-        if 'description' in data:
-            property1.description = data['description']
-        
-        if 'for_rent' in data:
-            property1.for_rent = data['for_rent'].lower() == 'true'
-        
-        db.session.commit()
-        flash('Updated successfully', 'success')
-        return redirect(url_for('uploads'))
+        try:
+            data = request.form
+            
+            if not data:
+                return jsonify({'success': False, 'message': 'Bad Request'}), 400
+            
+            if 'location' in data:
+                property1.location = data['location']
+            
+            if 'price' in data:
+                property1.price = float(data['price'])
+            
+            if 'bedrooms' in data:
+                property1.bedrooms = int(data['bedrooms'])
+            
+            if 'features' in data:
+                property1.features = data['features']
+            
+            if 'description' in data:
+                property1.description = data['description']
+            
+            if 'for_rent' in data:
+                property1.for_rent = data['for_rent'].lower() == 'true'
+            
+            db.session.commit()
+            return jsonify({'success': True, 'message': 'Property updated successfully'}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': str(e)}), 500
+
 
 @app.route('/send_email/<int:user_id>', methods=['POST'])
 def send_email(user_id):
@@ -352,7 +349,7 @@ def update_profile():
             user.agency = data['agency']
 
         db.session.commit()
-        flash('Updated successfully', 'success')
+        return redirect(url_for('profile'))
 
 @app.route('/delete_profile', methods=['POST'])
 @login_required

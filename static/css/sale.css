@@ -147,48 +147,67 @@ nav ul a.active {
 }
 
 #container {
-        width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-wrap: wrap;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 60px;
 }
 
 .item {
-	border: 1px solid gold;
-	border-radius: 1px solid gold;
-	width: 30%;
-	display: flex;
-	flex-direction: column;
-	height: 300px;
-	margin: 1.5%;
+    border: 1px solid gold;
+    border-radius: 1px solid gold;
+    width: calc(33.33% - 3%);
+    margin: 1.5%;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+}
+
+@media screen and (max-width: 768px) {
+    .item {
+        width: calc(50% - 3%);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .item {
+        width: calc(100% - 3%);
+    }
 }
 
 .image {
-	width: 100%;
-	height: 180px;
+    width: 100%;
+    height: 180px;
 }
 
 .image img {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .description {
-	width: 100%i;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	height: 120px;
-	justify-content: space-evenly;
-	background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 120px;
+    justify-content: space-evenly;
+    background-color: black;
+}
+
+h2 {
+    margin-left: 10px;
+    color: #0598ce;
 }
 
 .price {
-	font-size: 28px;
+    margin-left: 10px;
+    font-size: 28px;
+    color: gold;
 }
 
 .default {
-	position: fixed;
-	bottom: 50%;
+    position: fixed;
+    bottom: 50%;
 }

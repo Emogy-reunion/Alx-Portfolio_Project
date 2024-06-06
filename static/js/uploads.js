@@ -32,3 +32,32 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.item');
+
+    items.forEach(item => {
+        const image = item.querySelector('.image img');
+
+        image.addEventListener('click', function() {
+            const propertyId = item.dataset.property_id;
+
+            fetch(`/details/${propertyId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('details-container').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+    });
+});

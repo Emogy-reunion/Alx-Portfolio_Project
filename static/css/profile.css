@@ -1,12 +1,17 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+*{
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
 }
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #B76E79;
+    font-family: Verdana, Geneva, sans-serif;
+    overflow-x: hidden;
+
+}                                                                                                                                                                                                         
 
 p{
     margin-right: 5px;
@@ -142,106 +147,61 @@ nav ul a.active {
 }
 
 
-h2 {
-    margin-top: 70px;
+body {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.profile-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-container h2 {
+    margin-bottom: 20px;
     color: #333;
+}
+
+.profile-details {
+    text-align: left;
     margin-bottom: 20px;
 }
 
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.profile-item {
+    margin-bottom: 10px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
+.profile-item strong {
+    display: inline-block;
+    width: 120px;
+    color: #555;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 100%;
-    margin-top: 10px;
-    font-size: 16px;
+.profile-item span {
+    color: #333;
 }
 
-textarea {
-    resize: vertical;
-}
-
-button#upload-btn {
+#edit-profile {
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 15px;
+    padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 16px;
 }
 
-button#upload-btn:hover {
+#edit-profile:hover {
     background-color: #0056b3;
-}
-
-#image-preview {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
-  .image-preview-item {
-    margin-right: 10px;
-    margin-bottom: 10px;
-    position: relative;
-  }
-
-  .image-preview-item img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-
-
-.remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: black;
-    color: gold;
-    border: none;
-    border-radius: 50%;
-    padding: 5px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-}
-
-input::placeholder,
-textarea::placeholder,
-select::placeholder {
-    color: #999;
-}
-
-#image-preview {
-    display: flex;
-    flex-wrap: wrap;
 }
 

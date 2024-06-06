@@ -4,9 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='uploads/css/profile.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
+    <nav>
+    <ul class="sidebar">
+      <li onclick="hideSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('upload') }}">Upload</a></li>
+      <li><a href="{{ url_for('uploads') }}">Uploads</a></li>
+      <li><a href="{{ url_for('profile') }}">Profile</a></li>
+      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+
+    <ul>
+      <li class="hideOnMobile"><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('upload') }}">Upoad</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('uploads') }}">Uploads</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('profile') }}">profile</a></li>
+      <li class="hideOnMobile"><a href="{{ url_for('logout') }}">Logout</a></li>
+      <li class="menu-button" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+    </ul>
+  </nav>
+    
     <div class="profile-container">
         <h2>User Profile</h2>
         <div class="profile-details">
@@ -33,6 +53,6 @@
         </div>
         <button id="edit-profile">Edit Profile</button>
     </div>
-    <script src="{{ url_for('static', filename='uploads/js/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 </body>
 </html>
