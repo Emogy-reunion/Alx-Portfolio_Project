@@ -37,6 +37,8 @@
                         <h2>{{ property_item.location }}</h2>
                         <p>ksh <span class="price">{{ property_item.price }}</span>/month</p>
                         <p>{{ property_item.bedrooms }} bedrooms</p>
+			<a href="{{ url_for('property_details', property_id=property_item.id) }}">See Details</a>
+</div>
                     </div>
                 </div>
             {% endfor %}

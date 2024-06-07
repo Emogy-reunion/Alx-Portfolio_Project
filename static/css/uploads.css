@@ -220,9 +220,8 @@ h2 {
 }
 
 .price {
-    margin-left: 10px;
-    font-size: 14x;
-    color: gold;
+    color: #006633;
+    font-size: 20px;
 }
 
 .default {

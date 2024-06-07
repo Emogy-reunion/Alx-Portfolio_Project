@@ -210,3 +210,15 @@ h2 {
     position: fixed;
     bottom: 50%;
 }
+
+
+.description a {
+    display: block;
+    color: blue;
+    margin-left: 10px;
+    text-decoration: underline;
+}
+
+.description a:hover {
+    color: darkblue;
+}
