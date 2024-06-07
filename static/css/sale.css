@@ -16,6 +16,7 @@ body {
 p{
     margin-right: 5px;
     color: white;
+    margin-left: 10px;
 }
                                                                                                      
 
@@ -155,8 +156,6 @@ nav ul a.active {
 }
 
 .item {
-    border: 1px solid gold;
-    border-radius: 1px solid gold;
     width: calc(33.33% - 3%);
     margin: 1.5%;
     display: flex;
@@ -184,6 +183,7 @@ nav ul a.active {
 .image img {
     width: 100%;
     height: 100%;
+    border-radius: 10px;
 }
 
 .description {
@@ -193,7 +193,7 @@ nav ul a.active {
     align-items: flex-start;
     height: 120px;
     justify-content: space-evenly;
-    background-color: black;
+    background-color: #B76E79;
 }
 
 h2 {
@@ -202,9 +202,8 @@ h2 {
 }
 
 .price {
-    margin-left: 10px;
-    font-size: 28px;
-    color: gold;
+    font-size: 20px;
+    color: #006633;
 }
 
 .default {
