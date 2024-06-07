@@ -12,7 +12,7 @@
         <div class="slides">
             {% for image in property.images %}
                 <div class="slide">
-                    <img src="{{ url_for('uploaded_files', filename=image.filename) }}" alt="{{ image.filename }}">                                                                             
+                    <img src="{{ url_for('uploaded_file', filename=image.filename) }}" alt="{{ image.filename }}">                                                                             
                 </div>
             {% endfor %}
         </div>
