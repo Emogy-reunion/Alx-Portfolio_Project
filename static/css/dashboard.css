@@ -167,7 +167,7 @@ nav ul a.active {
     height: 100vh;
     display: flex;
     align-items: center;
-    background-image: url("/static/css/dashboard.gif");
+    background-image: url("/static/css/home.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;
@@ -179,7 +179,7 @@ nav ul a.active {
 
 	@media screen and (orientation: portrait) {
     		.home-section {
-        	background-image: url("/static/css/dashboard.gif");
+        	background-image: url("/static/css/home.jpg");
         	height: 50vh;
     		}
 
@@ -195,7 +195,7 @@ nav ul a.active {
 
 	@media screen and (orientation: landscape) {
     		.home-section {
-        	background-image: url("/static/css/dashboard.gif");
+        	background-image: url("/static/css/home.jpg");
         	height: 500px;
     		}
 
